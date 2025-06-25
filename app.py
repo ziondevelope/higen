@@ -13,16 +13,16 @@ def buscar_leads_maps(nicho, regiao):
     soup = BeautifulSoup(response.text, "html.parser")
 
     resultados = []
-    for item in soup.select("div.g")[:10]:
+    for item in soup.select("div.tF2Cxc")[:10]:  # novo seletor
         titulo = item.select_one("h3")
         link = item.select_one("a")
-        snippet = item.select_one("span.aCOpRe")
+        snippet = item.select_one("div.IsZvec")  # novo seletor do texto do resultado
 
         if titulo and link:
             resultados.append({
                 "Nome": titulo.get_text(),
                 "Link do Google Maps": link["href"],
-                "Resumo": snippet.get_text() if snippet else ""
+                "Resumo": snippet.get_text(strip=True) if snippet else ""
             })
     return resultados
 
@@ -56,4 +56,4 @@ if st.button("Extrair Leads"):
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
             else:
-                st.info("Nenhum resultado encontrado.")
+                st.info("Nenhum resultado encontrado. Tente um termo mais comum ou verifique a ortografia.")
